@@ -156,31 +156,48 @@ function endGame() {
     finalRel.textContent = scores.rel;
     finalAcad.textContent = scores.acad;
 
-    // Calculate total score and check for balance
+    // Calculate total score and identify the weakest and strongest areas
     const totalScore = scores.fin + scores.rel + scores.acad;
     const minScore = Math.min(scores.fin, scores.rel, scores.acad);
     const maxScore = Math.max(scores.fin, scores.rel, scores.acad);
-    const isBalanced = maxScore - minScore <= 10;
 
-    // Assign titles and messages
+    // Determine the weakest area
+    let weakest;
+    if (scores.fin === minScore) weakest = "fin";
+    if (scores.rel === minScore) weakest = "rel";
+    if (scores.acad === minScore) weakest = "acad";
+
+    // Determine the title and message
     let title = "";
     let message = "";
 
-    if (isBalanced && totalScore > 80) {
+    if (maxScore - minScore <= 10 && totalScore > 80) {
         title = "Master of Balance";
         message = "You’ve balanced life’s priorities like a master!";
-    } else if (scores.fin > scores.rel && scores.fin > scores.acad) {
-        title = "The Hustler";
-        message = "You chased money hard, but your GPA couldn’t keep up!";
-    } else if (scores.acad > scores.fin && scores.acad > scores.rel) {
-        title = "Academic Overachiever";
-        message = "Your grades are soaring, but your wallet could use a tutor!";
-    } else if (scores.rel > scores.fin && scores.rel > scores.acad) {
-        title = "Family Hero";
-        message = "Your family loves you, but your wallet is feeling neglected!";
-    } else {
-        title = "Life Navigator";
-        message = "You navigated life’s challenges, but balance eluded you this time!";
+    } else if (weakest === "fin") {
+        if (scores.acad > scores.rel) {
+            title = "The Broke Genius";
+            message = "Your grades are soaring, but your wallet skipped class!";
+        } else {
+            title = "The Family Spender";
+            message = "Your family’s thrilled, but your bank account needs resuscitation!";
+        }
+    } else if (weakest === "rel") {
+        if (scores.acad > scores.fin) {
+            title = "The Lone Wolf";
+            message = "Your grades are glowing, but your family’s feeling left out!";
+        } else {
+            title = "Money Over Memories";
+            message = "Your wallet is full, but your family’s not around to enjoy it.";
+        }
+    } else if (weakest === "acad") {
+        if (scores.fin > scores.rel) {
+            title = "The Hustler";
+            message = "You chased money hard, but forgot to hit the books!";
+        } else {
+            title = "Family First, School Last";
+            message = "Your family is happy, but your GPA didn’t make the cut!";
+        }
     }
 
     // Display title and message
